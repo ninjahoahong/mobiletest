@@ -9,6 +9,8 @@ var express 	= require('express'),
 		applicationId : "yourApplicationId"
 	};
 
+var https = require('https');
+
 // init core sdk
 ibmbluemix.initialize(config);
 var logger = ibmbluemix.getLogger();
@@ -29,6 +31,47 @@ app.use(function(req, res, next) {
 // init basics for an express app
 app.use(require('./lib/setup'));
 
+  function callApi(details, callback) {
+    var payload = details.payload ? details.payload: "";
+    var options = {
+      host: "nordea-api.icds.ibmcloud.com",
+      path: "/nordea/sb"+details.route+"&client_id="+details.clientId,
+      method: "GET",
+      port: 443,
+      rejectUnauthorized: false,
+      headers: {
+        "Content-Type": "application/json",
+        "Content-Length": payload.length
+      }
+    };
+    var data = "";
+    var apiReq = https.request(options, function(response) {
+      response.on('data', function(d) {
+        data += d;
+      });
+      response.on('end', function() {
+        callback(data);
+      });
+      response.on('error', function(error) {
+        process.stdout.write(error);
+      });
+    });
+    if (payload.length > 0) {
+      apiReq.write(payload);
+    }
+    apiReq.end();
+  }
+
+    var details = {
+      route: "/accounts/get?AccountId=5",
+      method: "GET",
+      clientId: "b02154b0-894a-496e-9bbf-db6e3397bd91"
+    };
+
+    callApi(details, function(data){
+      console.log(data);
+    });	
+  
 //uncomment below code to protect endpoints created afterwards by MAS
 //var mas = require('ibmsecurity')();
 //app.use(mas);
