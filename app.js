@@ -62,16 +62,27 @@ app.use(require('./lib/setup'));
     apiReq.end();
   }
 
+    // var details = {
+    //   route: "/accounts/get?AccountId=5",
+    //   method: "GET",
+    //   clientId: "b02154b0-894a-496e-9bbf-db6e3397bd91"
+    // };
+
+    // callApi(details, function(data){
+    //   console.log(data);
+    // });
+    	
+   app.get('/api/getAccount/:id', function(req, res){
     var details = {
-      route: "/accounts/get?AccountId=5",
+      route: "/accounts/get?AccountId="+req.params.id,
       method: "GET",
-      clientId: "b02154b0-894a-496e-9bbf-db6e3397bd91"
+      clientId: "0454e152-3e29-447a-91b5-a3d22ba984a4"
     };
 
     callApi(details, function(data){
-      console.log(data);
-    });	
-  
+      res.send(data);
+    });
+  });
 //uncomment below code to protect endpoints created afterwards by MAS
 //var mas = require('ibmsecurity')();
 //app.use(mas);
