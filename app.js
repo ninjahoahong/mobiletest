@@ -15,9 +15,11 @@ var https = require('https');
 ibmbluemix.initialize(config);
 var logger = ibmbluemix.getLogger();
 
+app.use(express.static(__dirname + "/public"));
+
 //redirect to cloudcode doc page when accessing the root context
 app.get('/', function(req, res){
-	res.sendfile('public/index.html');
+	res.sendfile('index.html');
 });
 
 // init service sdks 
@@ -27,6 +29,7 @@ app.use(function(req, res, next) {
     req.logger = logger;
     next();
 });
+
 
 // init basics for an express app
 app.use(require('./lib/setup'));

@@ -1,1 +1,384 @@
-hello from the cloud code application - please read the following pages for more information: <a href="https://www.ng.bluemix.net/docs/#starters/mobile/mobilecloud/nodejsmobile.html#nodejsmobile">Extending Node.js to use Mobile Cloud applications</a>
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Demo</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link href="bootplus/css/bootplus.css" rel="stylesheet">
+    <link href="bootplus/css/bootplus-responsive.css" rel="stylesheet">
+	<link href="font-awesome/css/font-awesome.css " rel="stylesheet">
+	<link href="rateit/src/rateit.css" rel="stylesheet">
+	<link rel="stylesheet" href="powerange/powerange.css" >
+	
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+	<script src="bootplus/js/bootstrap.js"></script>
+	
+	<script src="rateit/src/jquery.rateit.js"></script>
+	
+	<script>
+	 $(document).ready(function(){	   	   
+	   setTimeout(function(){
+		 $("#loadingLogo").fadeOut(function(){
+		   $(".footer .navbar .nav li:eq(0)").first().click(); //show the default page
+		   
+		   
+		   $.getJSON("http://erikmobiletest.mybluemix.net/api/getNeededInfo/4", function(data){			 			 
+		       $("#crossSelling .card-body").append(data["message"]);
+		   });
+
+		 });
+	   }, 2000);
+	   
+	   /* $("#crossSelling").hide(); */
+	   
+	   function showPage(which){
+		 // hide and show
+		 $(".page").hide();
+		 $(which).show();
+		 
+		 $(".footer .navbar .nav li[data-tab='" + $(which).attr("id") + "']").addClass("active").siblings().removeClass("active");
+
+		 $("header .title").text($(which).data("title"));  //change the title
+
+		 if(!$("header").is(":visible")){
+		   showHeader();
+		 }
+	   }
+
+	   function showHeader(){
+		 $("header").slideDown();		 
+		 $("footer").slideDown();
+	   }
+	   
+	   $(".footer .navbar .nav li").on("click", function(){
+		 var which = "#"  + $(this).data("tab");
+		 
+		 showPage(which, $(this));		 
+	   });
+	   								 
+	   
+	   $(".rateit").rateit();	   
+
+	   $("#surveyPost .btn-pos").on("click", function(){
+		 showPage("#survey");
+	   });
+	   
+	   var lastScroll = 0;
+	   $(document).scroll(function(){
+         var st = $(this).scrollTop();
+         //Determines up-or-down scrolling
+         if (st > lastScroll){
+           //Replace this with your function call for downward-scrolling
+           $("header").slideUp();
+		   $("footer").slideUp();
+         }
+         else {
+           //Replace this with your function call for upward-scrolling
+           $("header").slideDown();
+		   $("footer").slideDown();
+         }
+         //Updates scroll position
+         lastScroll = st;
+	   });
+
+	   function giveRewards(howmany){
+		 
+	   }
+	   
+	   $("#survey .btn-submit").on("click", function(){
+		 showPage("#newsfeed");
+		 giveRewards(15);
+	   });
+								  
+	   $("header").hide();
+	   $("footer").hide();
+
+	 });
+	 
+	</script>
+	<style>
+	 .navbar-primary .navbar-inner{
+	   color: #FFF;
+	   background-color: #357AE8;
+	   padding-left: 20px;
+	 }
+
+	 .navbar-primary .navbar-inner .title{
+	   position: relative;
+       top: 10px;
+	   margin-top: 0px;
+	   margin-bottom: 10px;
+	 }
+	 
+	 .footer .navbar .nav li a i{
+	   background: #fff;
+	   padding: 5px;
+	   font-size: 24px;
+	   color: #999;
+	 }
+
+	 .footer .navbar .nav li.active a i{
+	  color: #357AE8;
+	 }
+	 
+	 .first{
+	  position:relative;
+	  left: 0%;
+	 }
+
+	 .second{
+	   position:relative;
+	   left: 33%;
+	 }
+
+	 .third{
+	   position:relative;
+	   left: 66%;
+	 }
+	 
+	 .profile-item{
+	  display: inline;;
+	 }
+
+	 .profile-item-key{
+	  width: 35%;
+	  font-weight: bold;
+	 }
+
+	 .profile-item-value{
+	   width: 64%;
+	 }
+	 
+	 #survey .row-fluid{
+	   margin-bottom: 10px;
+	 }
+
+	 #survey .survey-item-key{
+	  margin-bottom: 5px;
+	 }
+
+	</style>
+	<style>
+	 #loadingLogo{
+	   background: #eee;
+	   position:relative;
+	   width:320px;
+	   height:480px;
+	 }
+	</style>	
+  </head>
+  <body style="padding:0px;">	
+	<div id="loadingLogo">
+	  <img src="assets/img/ne.png" height="192" width="192" style="margin-left: 25%; margin-top: 40%; width: 50%; height: auto;">
+	</div> 
+	<header class="navbar navbar-fixed-top navbar-primary" style="position: fixed;">
+	  <div class="navbar-inner" style="margin-left:20px">
+		<h3 class="title"></h3>
+		<!--  <a class="icon icon-search pull-right"></a> -->
+	  </div>
+    </header>
+	<div id="newsfeed" class="container page" data-title="News Feed">
+	  <div id="surveyPost" class="card">
+		<div class="card-heading image">
+          <img src="assets/img/product-recommender.png" alt=""/>
+          <div class="card-heading-header">
+			<h3>Nordea Survey</h3>
+			<span>Two hours ago</span>
+          </div>
+		</div>
+		<div class="card-body">
+          <h3 class="text-error"></h3>
+		  <p>Hi John Doe,</p>
+          <p>
+			You have had a face-to-face meeting with Ilkka Investment Advisor on 28th of November 1pm at the Mannerheimintie 7, 00100 Helsinki. Please answer to the following four questions below to give feedback on the quality of the meeting. By responding you receive points which you can turn in to <strong class="text-info">15 rewarding points</strong> within the application in app store. 
+		  </p>
+		  <p>
+			Are you willing to take it?
+		  </p>
+		</div>
+		<div class="card-actions">
+          <a class="btn btn-pos" href="#">
+			Yes
+			<i class="icon-circle-arrow-right"></i>
+          </a>
+		  <a class="btn btn-neg" href="#">
+			No
+          </a>
+		</div>
+	  </div>
+	  <div id="cardLock" class="card">
+		<div class="card-heading image">
+          <img src="assets/img/security-manager.png" alt=""/>
+          <div class="card-heading-header">
+            <h3>Nordea Security</h3>
+            <span>Just now</span>
+          </div>
+        </div>
+		<div class="card-body">
+          <h3 class="text-error">Your card is locked</h3>		  
+          <p>
+			Hi Ilkka,
+		  </p>
+		  <p>
+			You have entered your pin wrong three times at <strong>Point of Sale in Helsinki Kamppi</strong>. To unlock your pin please press yes. If you can not remember your pin, press <strong>order</strong> to receive new pin to your current home <strong>address</strong> (xxx).
+		  </p>
+        </div>
+		<div class="card-actions">
+          <a class="btn" href="#">
+            Yes
+            <i class="icon-circle-arrow-right"></i>
+          </a>
+		  <a class="btn" href="#">
+            No
+          </a>
+		  <a class="btn" href="#">
+			Order Pin
+          </a>
+		  <a class="btn" href="#">
+            Call
+          </a>
+        </div>
+	  </div>
+
+	  <div id="crossSelling" class="card">
+		<div class="card-heading image">
+          <img src="assets/img/product-recommender.png" alt=""/>
+          <div class="card-heading-header">
+            <h3>Nordea Products</h3>
+            <span>Two hours ago</span>
+          </div>
+        </div>
+		<div class="card-body">
+          <h3 class="text-error"></h3>		  
+        </div>
+		<div class="card-actions">
+          <a class="btn" href="#">
+            Yes
+            <i class="icon-circle-arrow-right"></i>
+          </a>
+		  <a class="btn" href="#">
+            No
+          </a>
+        </div>
+	  </div>	  	  	  
+	</div>
+	<div id="piggyBank" class="container page" data-title="Store">
+	  <div class="card">
+		<h3 class="card-heading simple">
+		  Financial Product1!
+		</h3>
+		<div class="card-body">
+		  <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
+			tempor incididunt ut labore et dolore magna aliqua.
+		  </p>
+		  <p>
+			<ul>
+			  <li>Amount: 20,000 eur</li>
+			  <li>Duration: 3 months</li>
+			  <li>Return rate: 3%</li>
+			</ul>
+		  </p>
+		</div>
+		<div class="card-actions">		  
+		  <button class="btn">+1</button>
+		  <button class="btn">Share</button>
+		  <button class="btn pull-right">More</button>
+		</div>
+	  </div>
+	  <div class="card">
+		<h3 class="card-heading simple">
+		  Financial Product2!
+		</h3>
+		<div class="card-body">
+		  <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
+			tempor incididunt ut labore et dolore magna aliqua.
+		  </p>
+		  <p>
+			<ul>
+			  <li>Amount: 20,000 eur</li>
+			  <li>Duration: 1 year</li>
+			  <li>Return rate: 5%</li>
+			</ul>
+		  </p>
+		</div>
+		<div class="card-actions">
+		  <button class="btn">+1</button>
+		  <button class="btn">Share</button>
+		</div>
+	  </div>
+	</div>
+	<div id="profile" class="container page" data-title="Profile" style="margin-top: 70px;">
+	  <div class="card">
+		<div class="card-heading image">
+          <img src="assets/img/security-manager.png" alt=""/>
+          <div class="card-heading-header">
+            <h3><strong>Somebody</strong></h3>
+            <i class="fa fa-gift text-error" ></i> <span>12</span>
+          </div>
+        </div>
+		<div class="card-body">
+		  <div class="row-fluid">
+			<div class="profile-item profile-item-key">Email:</div>
+			<div class="profile-item profile-item-value">someone@someplace.com</div>
+		  </div>
+		  <div class="row-fluid">
+			<div class="profile-item profile-item-key">Phone:</div>
+			<div class="profile-item profile-item-value">12345678</div>
+		  </div>
+		</div>
+		<div class="card-actions">		  
+		  <button class="btn">Edit</button>
+		</div>
+	  </div>
+	</div>
+	<div id="survey" class="container page" data-title="Meeting Survey">
+	  <div class="card">
+		<div class="card-heading simple">
+          <h3>Please answer:</h3>
+        </div>
+		<div class="card-body">
+		  <div class="row-fluid">
+			<div class="survey-item survey-item-key">1, How satisfied where you to the meeting with the advisor?</div>
+			<div class="rateit survey-item survey-item-value" data-rateit-resetable="false"></div>
+		  </div>
+		  <div class="row-fluid">
+			<div class="survey-item survey-item-key">2, Did you feel that you received added value from the meeting?</div>
+			<div class="rateit survey-item survey-item-value" data-rateit-resetable="false"></div>
+		  </div>
+		  <div class="row-fluid">
+			<div class="survey-item survey-item-key">3, How willingly would you recommend the financial provider to your friends on basis of your experience?</div>
+			<div class="rateit survey-item survey-item-value" data-rateit-resetable="false"></div>
+		  </div>
+		  <div class="row-fluid">
+			<div class="survey-item survey-item-key">4, Give your open comments about the meeting:
+			</div>
+			<div class="survey-item survey-item-value">
+			  <form>
+				<textarea></textarea>
+			  </form>
+			</div>
+		  </div>
+		</div>
+		<div class="card-actions">		  
+		  <button class="btn btn-success btn-submit">Submit</button>
+		  <button class="btn">Cancel</button>
+		</div>
+	  </div>
+	</div>
+	<footer class="footer">
+	  <div class="navbar navbar-fixed-bottom" style="margin-bottom: 0px; background: #FFF; position:fixed; opacity: 0.8;">
+		<div class="container navbar-inner">
+		  <ul class="nav" style="margin-left: 70px;">
+			<li class="active" data-tab="newsfeed"><a><i class="fa fa-newspaper-o"></i></a></li>
+			<li data-tab="piggyBank"><a><i class="fa fa-trophy"></i></a></li>
+			<!--<i class="second" ><img src="assets/img/piggy-bank.png"/></i>--> <!-- pig bank or bag of money-->
+			<li data-tab="profile"><a><i class="fa fa-user"></i></a></li>
+		  </ul>
+		</div>
+		<div style="clear: both;"></div>
+	  </div>
+	</footer>
+	
+  </body>
+</html>
