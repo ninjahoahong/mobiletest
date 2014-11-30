@@ -62,16 +62,6 @@ app.use(require('./lib/setup'));
     apiReq.end();
   }
 
-    // var details = {
-    //   route: "/accounts/get?AccountId=5",
-    //   method: "GET",
-    //   clientId: "b02154b0-894a-496e-9bbf-db6e3397bd91"
-    // };
-
-    // callApi(details, function(data){
-    //   console.log(data);
-    // });
-
    app.get('/api/getAccount/:id', function(req, res){
     var details = {
       route: "/accounts/get?AccountId="+req.params.id,
@@ -80,7 +70,13 @@ app.use(require('./lib/setup'));
     };
 
     callApi(details, function(data){
-      res.send(data);
+      var customer = JSON.parse(data);
+
+      res.json({
+                  income: customer.Income,
+                  threshold: 20,
+                  button: {yes: "yes", no:"no"}
+                });
     });
   });
 //uncomment below code to protect endpoints created afterwards by MAS
