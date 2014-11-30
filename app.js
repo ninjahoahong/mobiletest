@@ -85,12 +85,22 @@ app.use(require('./lib/setup'));
 
     callApi(details, function(data){
       var customer = JSON.parse(data);
-
-      res.json({
+      if (customer.Income > 20) {
+        res.json({
                   income: customer.Income,
                   threshold: 20,
-                  button: {yes: "yes", no:"no"}
+                  button: {yes: "yes", no:"no"},
+                  message:"<p>Hi John,</p><p>We have noticied that there has been significant surplus on your account over 20 days. We suggest that you consider investing it to a more profitable solution. Press products to read about our current investment options, press request contact to receivea call from our investment advisor or press call to call directly to our investment advisor.</p>"
                 });
+      } else {
+        res.json({
+                  income: customer.Income,
+                  threshold: 20,
+                  button: {yes: "yes", no:"no"},
+                  message:"nothing special"
+                });
+      }
+      
     });
   });
 //uncomment below code to protect endpoints created afterwards by MAS
