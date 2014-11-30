@@ -72,6 +72,20 @@ app.use(require('./lib/setup'));
     callApi(details, function(data){
       var customer = JSON.parse(data);
 
+      res.json(customer);
+    });
+  });
+
+   app.get('/api/getNeededInfo/:id', function(req, res){
+    var details = {
+      route: "/accounts/get?AccountId="+req.params.id,
+      method: "GET",
+      clientId: "0454e152-3e29-447a-91b5-a3d22ba984a4"
+    };
+
+    callApi(details, function(data){
+      var customer = JSON.parse(data);
+
       res.json({
                   income: customer.Income,
                   threshold: 20,
